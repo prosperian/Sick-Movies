@@ -1,1 +1,1 @@
-# Sick-Moviz
+# Sick-Movies
