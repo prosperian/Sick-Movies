@@ -6,6 +6,7 @@ object Utils {
     const val TOKEN = Token.MY_TOKEN
 
     const val BASE_URL = "https://api.themoviedb.org/3/"
+    const val DATABASE_NAME = "movie_db"
 
     const val KEY_ROUTE = "popular"
 }
