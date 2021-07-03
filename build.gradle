@@ -2,10 +2,13 @@
 buildscript {
     ext {
         compose_version = '1.0.0-beta07'
+        lifecycle_version = "2.3.0-alpha06"
         room_version = "2.3.0"
         retrofit_version = "2.9.0"
         hilt_version = "2.35.1"
         work_version = "2.5.0"
+        sandwich_version = "1.1.0"
+        hilt_compose_navigation = "1.0.0-alpha01"
     }
     repositories {
         google()

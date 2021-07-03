@@ -1,18 +1,19 @@
 package com.dip.sickmovies.api
 
+import androidx.lifecycle.LiveData
 import com.dip.sickmovies.models.Movie
-import retrofit2.Call
+import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.GET
 
 interface MovieApi {
 
     @GET("movie/top_rated")
-    suspend fun getTopRatedMovies(): Call<List<Movie>>
+    fun getTopRatedMovies(): LiveData<ApiResponse<List<Movie>>>
 
     @GET("movie/popular")
-    suspend fun getPopularMovies(): Call<List<Movie>>
+    fun getPopularMovies(): LiveData<ApiResponse<List<Movie>?>>
 
     @GET("movie/now_playing")
-    suspend fun getOnTheaterMovies(): Call<List<Movie>>
+    fun getOnTheaterMovies(): LiveData<ApiResponse<List<Movie>>>
 
 }

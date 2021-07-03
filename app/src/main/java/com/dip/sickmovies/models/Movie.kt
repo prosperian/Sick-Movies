@@ -1,10 +1,9 @@
 package com.dip.sickmovies.models
 
-import androidx.compose.runtime.Immutable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlin.properties.Delegates
 
-@Immutable
 @Entity(tableName = "Movie")
 data class Movie(
     @PrimaryKey val id: Int,
@@ -19,6 +18,7 @@ data class Movie(
     val title: String,
     val hasVideo: Boolean,
     val voteAverage: Float,
-    val voteCount: Int
-
-)
+    val voteCount: Int,
+){
+    var dataFetchDate by Delegates.notNull<Long>()
+}

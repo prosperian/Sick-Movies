@@ -1,6 +1,7 @@
 package com.dip.sickmovies
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dip.sickmovies.navigation.Screen
 import com.dip.sickmovies.utils.Utils.KEY_ROUTE
 import com.dip.sickmovies.ui.theme.SickmoviesTheme
+import com.dip.sickmovies.viewmodels.MovieViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -127,7 +131,11 @@ fun ScreenController(
     topTitleBar: MutableState<String>
 ) {
     NavHost(navController = navController, startDestination = "popular") {
-        composable("popular") {
+        composable("popular") { backStackEntry ->
+            val viewModel = hiltNavGraphViewModel<MovieViewModel>(backStackEntry = backStackEntry)
+            viewModel.popularMovieList.observe(LocalLifecycleOwner.current){
+                Log.d("main", "observer")
+            }
             Popular()
             topTitleBar.value = "Popular"
         }
