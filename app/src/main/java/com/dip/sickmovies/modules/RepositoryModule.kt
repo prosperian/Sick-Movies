@@ -1,4 +1,4 @@
-package com.dip.sickmovies.di
+package com.dip.sickmovies.modules
 
 import com.dip.sickmovies.AppExecutors
 import com.dip.sickmovies.api.MovieApi
@@ -7,11 +7,13 @@ import com.dip.sickmovies.repository.MainRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 object RepositoryModule {
 
     @Provides

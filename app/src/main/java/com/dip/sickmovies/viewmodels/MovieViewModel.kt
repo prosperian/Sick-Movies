@@ -8,8 +8,10 @@ import com.dip.sickmovies.api.Resource
 import com.dip.sickmovies.base.LiveCoroutinesViewModel
 import com.dip.sickmovies.models.Movie
 import com.dip.sickmovies.repository.MainRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class MovieViewModel
 @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
 

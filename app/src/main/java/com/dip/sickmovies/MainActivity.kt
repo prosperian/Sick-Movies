@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -40,90 +42,95 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    @VisibleForTesting
+    val viewModel: MovieViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SickmoviesTheme {
-                val navController = rememberNavController()
-                val title = remember {
-                    mutableStateOf("Popular")
-                }
-                Surface(color = MaterialTheme.colors.background) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = { Text(text = title.value) },
-                                actions = {
-                                    IconButton(onClick = {
-                                        Toast.makeText(
-                                            this@MainActivity,
-                                            "Search",
-                                            Toast.LENGTH_SHORT
+            CompositionLocalProvider() {
+                SickmoviesTheme {
+                    val navController = rememberNavController()
+                    val title = remember {
+                        mutableStateOf("Popular")
+                    }
+                    Surface(color = MaterialTheme.colors.background) {
+                        Scaffold(
+                            topBar = {
+                                TopAppBar(
+                                    title = { Text(text = title.value) },
+                                    actions = {
+                                        IconButton(onClick = {
+                                            Toast.makeText(
+                                                this@MainActivity,
+                                                "Search",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Search,
+                                                contentDescription = "Search"
+                                            )
+                                        }
+                                    }
+                                )
+                            }, bottomBar = {
+                                val items = listOf<Screen>(
+                                    Screen.Popular,
+                                    Screen.NowPlaying,
+                                    Screen.TopRated
+                                )
+                                BottomNavigation(
+                                    backgroundColor = Color.Transparent,
+                                    elevation = 15.dp,
+                                    modifier = Modifier
+                                        .background(Color.White)
+                                        .padding(
+                                            start = 22.dp,
+                                            end = 22.dp,
+                                            bottom = 15.dp,
+                                            top = 10.dp
                                         )
-                                            .show()
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Search,
-                                            contentDescription = "Search"
+                                ) {
+                                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                    val currentRoute =
+                                        navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+                                    items.forEach {
+                                        BottomNavigationItem(
+                                            modifier = Modifier.background(
+                                                color = Color.White,
+                                                shape = RectangleShape
+                                            ),
+                                            selectedContentColor = Color.Red,
+                                            unselectedContentColor = Color.Blue,
+                                            icon = {
+                                                Icon(
+                                                    imageVector = it.icon,
+                                                    contentDescription = "Profile"
+                                                )
+                                            },
+                                            selected = currentRoute == it.route,
+                                            onClick = {
+                                                navController.popBackStack(
+                                                    navController.graph.startDestinationId,
+                                                    false
+                                                )
+                                                if (currentRoute != it.route) {
+                                                    navController.navigate(it.route)
+                                                }
+
+                                            }
                                         )
                                     }
                                 }
-                            )
-                        }, bottomBar = {
-                            val items = listOf<Screen>(
-                                Screen.Popular,
-                                Screen.NowPlaying,
-                                Screen.TopRated
-                            )
-                            BottomNavigation(
-                                backgroundColor = Color.Transparent,
-                                elevation = 15.dp,
-                                modifier = Modifier
-                                    .background(Color.White)
-                                    .padding(
-                                        start = 22.dp,
-                                        end = 22.dp,
-                                        bottom = 15.dp,
-                                        top = 10.dp
-                                    )
-                            ) {
-                                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                val currentRoute =
-                                    navBackStackEntry?.arguments?.getString(KEY_ROUTE)
-                                items.forEach {
-                                    BottomNavigationItem(
-                                        modifier = Modifier.background(
-                                            color = Color.White,
-                                            shape = RectangleShape
-                                        ),
-                                        selectedContentColor = Color.Red,
-                                        unselectedContentColor = Color.Blue,
-                                        icon = {
-                                            Icon(
-                                                imageVector = it.icon,
-                                                contentDescription = "Profile"
-                                            )
-                                        },
-                                        selected = currentRoute == it.route,
-                                        onClick = {
-                                            navController.popBackStack(
-                                                navController.graph.startDestinationId,
-                                                false
-                                            )
-                                            if (currentRoute != it.route) {
-                                                navController.navigate(it.route)
-                                            }
-
-                                        }
-                                    )
-                                }
                             }
+                        ) {
+                            ScreenController(
+                                navController = navController,
+                                topTitleBar = title
+                            )
                         }
-                    ) {
-                        ScreenController(
-                            navController = navController,
-                            topTitleBar = title
-                        )
                     }
                 }
             }

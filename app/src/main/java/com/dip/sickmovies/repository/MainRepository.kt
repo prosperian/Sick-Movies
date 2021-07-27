@@ -1,6 +1,7 @@
 package com.dip.sickmovies.repository
 
 import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.dip.sickmovies.api.MovieApi
 import com.dip.sickmovies.db.MovieDao
@@ -24,6 +25,7 @@ class MainRepository @Inject constructor(
     private val appExecutors: AppExecutors
 ) : Repository {
 
+    @WorkerThread
     fun getPopularMovies(
         onSuccess: () -> Unit,
         onError: (String) -> Unit

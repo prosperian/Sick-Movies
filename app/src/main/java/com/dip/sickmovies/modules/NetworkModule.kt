@@ -1,4 +1,4 @@
-package com.dip.sickmovies.di
+package com.dip.sickmovies.modules
 
 import com.dip.sickmovies.utils.Utils.BASE_URL
 import com.dip.sickmovies.api.MovieApi

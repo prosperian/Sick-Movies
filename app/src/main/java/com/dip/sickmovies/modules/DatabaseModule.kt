@@ -1,4 +1,4 @@
-package com.dip.sickmovies.di
+package com.dip.sickmovies.modules
 
 import android.content.Context
 import com.dip.sickmovies.db.AppDatabase
