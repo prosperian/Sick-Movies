@@ -23,7 +23,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +34,10 @@ import com.dip.sickmovies.navigation.Screen
 import com.dip.sickmovies.utils.Utils.KEY_ROUTE
 import com.dip.sickmovies.ui.theme.SickmoviesTheme
 import com.dip.sickmovies.viewmodels.MovieViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,7 +120,10 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {
-                        ScreenController(navController = navController, topTitleBar = title)
+                        ScreenController(
+                            navController = navController,
+                            topTitleBar = title
+                        )
                     }
                 }
             }
@@ -132,8 +139,8 @@ fun ScreenController(
 ) {
     NavHost(navController = navController, startDestination = "popular") {
         composable("popular") { backStackEntry ->
-            val viewModel = hiltNavGraphViewModel<MovieViewModel>(backStackEntry = backStackEntry)
-            viewModel.popularMovieList.observe(LocalLifecycleOwner.current){
+            val viewModel = hiltViewModel<MovieViewModel>()
+            viewModel.isLoading.observe(LocalLifecycleOwner.current) {
                 Log.d("main", "observer")
             }
             Popular()
