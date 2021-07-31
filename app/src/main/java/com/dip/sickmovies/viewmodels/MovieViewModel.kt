@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel
-@Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
+@Inject constructor(private val mainRepository: MainRepository) : LiveCoroutinesViewModel() {
 
     private var _popularMovieList: MutableLiveData<Boolean> = MutableLiveData(true)
     val popularMovieList: LiveData<Resource<List<Movie>?>>
@@ -25,12 +25,12 @@ class MovieViewModel
 
         popularMovieList = _popularMovieList.switchMap {
             _isLoading.postValue(true)
-//            launchOnViewModelScope {
+            launchOnViewModelScope {
                 this.mainRepository.getPopularMovies(
                     onSuccess = { _isLoading.postValue(false) },
                     onError = {}
                 )
-//            }
+            }
         }
 
     }

@@ -144,11 +144,15 @@ fun ScreenController(
     navController: NavHostController,
     topTitleBar: MutableState<String>
 ) {
+
     NavHost(navController = navController, startDestination = "popular") {
         composable("popular") { backStackEntry ->
             val viewModel = hiltViewModel<MovieViewModel>()
+            viewModel.popularMovieList.observe(LocalLifecycleOwner.current) {
+                Log.d("Main Activity", "loading movie list")
+            }
             viewModel.isLoading.observe(LocalLifecycleOwner.current) {
-                Log.d("main", "observer")
+                Log.d("Main Activity", it.toString())
             }
             Popular()
             topTitleBar.value = "Popular"

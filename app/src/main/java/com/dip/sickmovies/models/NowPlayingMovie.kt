@@ -13,5 +13,6 @@ import javax.annotation.concurrent.Immutable
     indices = [Index("now_playing_id")]
 )
 data class NowPlayingMovie(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "now_playing_id") val nowPlayingMovieId: Int,
 )

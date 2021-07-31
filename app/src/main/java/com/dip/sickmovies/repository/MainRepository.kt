@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import com.dip.sickmovies.api.MovieApi
 import com.dip.sickmovies.db.MovieDao
 import com.dip.sickmovies.AppExecutors
+import com.dip.sickmovies.MainActivity
 import com.dip.sickmovies.api.NetworkBoundResource
 import com.dip.sickmovies.api.Resource
 import com.dip.sickmovies.models.Movie
@@ -25,6 +26,8 @@ class MainRepository @Inject constructor(
     private val appExecutors: AppExecutors
 ) : Repository {
 
+    val TAG: String? = MainRepository::class.simpleName
+
     @WorkerThread
     fun getPopularMovies(
         onSuccess: () -> Unit,
@@ -34,23 +37,23 @@ class MainRepository @Inject constructor(
         return object : NetworkBoundResource<List<Movie>, List<Movie>>(appExecutors) {
 
             override fun loadFromDB(): LiveData<List<Movie>?> {
-                Log.d("main repository ", "loading from db")
+                Log.d(TAG, "loading from db")
 
                 return movieDao.getPopularMovies()
             }
 
             override fun loadFromNetwork(): LiveData<ApiResponse<List<Movie>?>> {
-                Log.d("main repository ", "loading from network")
+                Log.d(TAG, "loading from network")
                 return movieApi.getPopularMovies()
             }
 
             override fun saveCallResult(item: List<Movie>) {
-                Log.d("main repository ", "save results")
+                Log.d(TAG, "save results")
 
                 val popularMovies = mutableListOf<PopularMovie>()
                 for (i in item) {
                     i.dataFetchDate = Date().time
-                    val p = PopularMovie(i.id)
+                    val p = PopularMovie(popularMovieId = i.id)
                     popularMovies.add(p)
                 }
                 movieDao.insertAll(item)
@@ -58,7 +61,7 @@ class MainRepository @Inject constructor(
             }
 
             override fun getDataFetchDate(data: List<Movie>?): Long? {
-                Log.d("main repository ", "get fetch date")
+                Log.d(TAG, "get fetch date")
                 val movie = data?.get(0)
                 return movie?.dataFetchDate
             }

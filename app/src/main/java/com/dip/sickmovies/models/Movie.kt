@@ -20,5 +20,5 @@ data class Movie(
     val voteAverage: Float,
     val voteCount: Int,
 ){
-    var dataFetchDate by Delegates.notNull<Long>()
+    var dataFetchDate: Long = 0
 }
