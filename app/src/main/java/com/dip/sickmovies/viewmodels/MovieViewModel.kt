@@ -1,9 +1,7 @@
 package com.dip.sickmovies.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import android.util.Log
+import androidx.lifecycle.*
 import com.dip.sickmovies.api.Resource
 import com.dip.sickmovies.base.LiveCoroutinesViewModel
 import com.dip.sickmovies.models.Movie
@@ -16,20 +14,28 @@ class MovieViewModel
 @Inject constructor(private val mainRepository: MainRepository) : LiveCoroutinesViewModel() {
 
     private var _popularMovieList: MutableLiveData<Boolean> = MutableLiveData(true)
-    val popularMovieList: LiveData<Resource<List<Movie>?>>
+    val popularMovieList: LiveData<List<Movie>?>
 
-    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     init {
+        Log.d("MovieViewModel", "init");
 
         popularMovieList = _popularMovieList.switchMap {
             _isLoading.postValue(true)
+            Log.d("MovieViewModel", "switch map");
             launchOnViewModelScope {
                 this.mainRepository.getPopularMovies(
-                    onSuccess = { _isLoading.postValue(false) },
-                    onError = {}
-                )
+                    onSuccess = {
+                        Log.d("MovieViewModel", "on success");
+                        _isLoading.postValue(false)
+                    },
+                    onError = {
+                        Log.d("MovieViewModel", it)
+                        _isLoading.postValue(false)
+                    }
+                ).asLiveData()
             }
         }
 

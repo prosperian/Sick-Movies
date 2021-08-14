@@ -1,0 +1,11 @@
+ext.versions =[
+    compose : "1.0.0-rc02",
+    lifecycle : "2.3.0-alpha06",
+    room : "2.3.0",
+    retrofit : "2.9.0",
+    hilt : "2.37",
+    work : "2.5.0",
+    sandwich : "1.1.0",
+    hilt_compose_navigation : "1.0.0-alpha03",
+    whatif : "1.0.9",
+]

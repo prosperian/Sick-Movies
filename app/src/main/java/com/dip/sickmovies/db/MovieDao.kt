@@ -29,7 +29,7 @@ interface MovieDao {
 
     @Transaction
     @Query("select * from Movie where id in (select distinct(popular_id) from PopularMovie)")
-    fun getPopularMovies(): LiveData<List<Movie>?>
+    fun getPopularMovies(): List<Movie>
 
     @Query("select * from Movie where id in (select distinct(top_rated_id) from TopRatedMovie)")
     fun getTopRatedMovies(): LiveData<List<Movie>>

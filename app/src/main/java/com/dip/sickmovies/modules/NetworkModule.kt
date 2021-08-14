@@ -2,6 +2,7 @@ package com.dip.sickmovies.modules
 
 import com.dip.sickmovies.utils.Utils.BASE_URL
 import com.dip.sickmovies.api.MovieApi
+import com.skydoves.sandwich.coroutines.CoroutinesResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,7 @@ object NetworkModule {
 
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory())
             .baseUrl(BASE_URL)
             .build()
 

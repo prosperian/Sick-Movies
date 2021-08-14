@@ -1,5 +1,6 @@
 package com.dip.sickmovies.api
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -28,7 +29,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     abstract fun saveCallResult(item: RequestType)
 
     private fun shouldFetch(data: ResultType?, dataFetchDate: Long?): Boolean {
+        Log.d("Network resource", "out if");
         return if (data != null) {
+            Log.d("Network resource", "in if");
             dataFetchDate.let {
                 if (it != null) {
                     (Date().time - it) > Utils.TIME_TO_LIVE
@@ -42,8 +45,10 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     }
 
     fun execute() {
+        Log.d("Network resource", "execute");
 
         appExecutors.diskIO().execute {
+            Log.d("Network resource", "execute");
 
             val data = loadFromDB()
             val dataFetchDate = getDataFetchDate(data.value)
@@ -51,7 +56,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             result.postValue(Resource.loading(data = data.value))
             if (shouldFetch(data.value, dataFetchDate)) {
                 loadFromNetwork()
+                Log.d("Network resource", "from network");
             } else {
+                Log.d("Network resource", "from db");
                 result.postValue(Resource.success(data = data.value, date = dataFetchDate))
             }
         }
