@@ -149,7 +149,7 @@ fun ScreenController(
         composable("popular") { backStackEntry ->
             val viewModel = hiltViewModel<MovieViewModel>()
             viewModel.popularMovieList.observe(LocalLifecycleOwner.current) {
-                Log.d("Main Activity", "loading movie list")
+                Log.d("Main Activity", it.results.toString())
             }
             viewModel.isLoading.observe(LocalLifecycleOwner.current) {
                 Log.d("Main Activity", it.toString())

@@ -2,9 +2,8 @@ package com.dip.sickmovies.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.dip.sickmovies.api.Resource
 import com.dip.sickmovies.base.LiveCoroutinesViewModel
-import com.dip.sickmovies.models.Movie
+import com.dip.sickmovies.models.MovieListResponse
 import com.dip.sickmovies.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,7 +13,7 @@ class MovieViewModel
 @Inject constructor(private val mainRepository: MainRepository) : LiveCoroutinesViewModel() {
 
     private var _popularMovieList: MutableLiveData<Boolean> = MutableLiveData(true)
-    val popularMovieList: LiveData<List<Movie>?>
+    val popularMovieList: LiveData<MovieListResponse>
 
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean> get() = _isLoading
