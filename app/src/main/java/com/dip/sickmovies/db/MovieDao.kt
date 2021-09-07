@@ -24,16 +24,23 @@ interface MovieDao {
     @Insert(entity = NowPlayingMovie::class, onConflict = OnConflictStrategy.REPLACE)
     fun insertAllNowPlayingMovie(movies: List<NowPlayingMovie>)
 
+    @Transaction
     @Query("select * from Movie where id = :id")
-    fun getMovie(id: Int): LiveData<Movie>
+    fun getMovie(id: Int): Movie
+
+    @Transaction
+    @Query("select * from Movie")
+    fun getAllMovies(): List<Movie>
 
     @Transaction
     @Query("select * from Movie where id in (select distinct(popular_id) from PopularMovie)")
     fun getPopularMovies(): List<Movie>
 
+    @Transaction
     @Query("select * from Movie where id in (select distinct(top_rated_id) from TopRatedMovie)")
     fun getTopRatedMovies(): LiveData<List<Movie>>
 
+    @Transaction
     @Query("select * from Movie where id in (select distinct(now_playing_id) from NowPlayingMovie)")
     fun getNowPlayingMovies(): LiveData<List<Movie>>
 

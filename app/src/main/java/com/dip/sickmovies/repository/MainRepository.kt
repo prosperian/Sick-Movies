@@ -39,11 +39,13 @@ class MainRepository @Inject constructor(
         onError: (String) -> Unit
     ) = flow {
 
-        val popMovies: List<Movie> = movieDao.getPopularMovies()
+        val popMovies: List<Movie> = movieDao.getAllMovies()
+        Log.d("dani list", popMovies.isEmpty().toString())
         if (popMovies.isEmpty()) {
             movieApi.getPopularMovies()
                 .suspendOnSuccess {
-                    data.whatIfNotNull{
+                    data.whatIfNotNull {
+                        movieDao.insertAll(it.results)
                         emit(it)
                         onSuccess()
                     }

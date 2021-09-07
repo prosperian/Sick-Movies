@@ -12,7 +12,7 @@ import com.dip.sickmovies.utils.Utils.DATABASE_NAME
 
 @Database(
     entities = [Movie::class, PopularMovie::class, TopRatedMovie::class, NowPlayingMovie::class],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -36,7 +36,8 @@ abstract class AppDatabase : RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 DATABASE_NAME
-            ).build()
+            ).fallbackToDestructiveMigration()
+                .build()
 
         }
 
